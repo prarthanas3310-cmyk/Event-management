@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../ThemeContext';
 
 function LandingPage() {
   const navigate = useNavigate();
-
+  const { dark } = useTheme();
   const features = [
     { icon: '📋', title: 'Easy Registration', desc: 'Add attendees instantly with name, contact, ticket count and payment status in seconds.' },
     { icon: '💳', title: 'Payment Tracking', desc: 'Track Paid and Pending payments at a glance with color-coded status badges.' },
@@ -33,16 +34,27 @@ function LandingPage() {
   ];
 
   return (
-    <div className="landing-page" style={{ fontFamily: "'Poppins', sans-serif", color: '#1E1B4B', overflowX: 'hidden' }}>
-
+   <div
+  className="landing-page"
+  style={{
+    fontFamily: "'Poppins', sans-serif",
+    color: dark ? '#E9E7FF' : '#1E1B4B',
+    background: dark ? '#0F0E2A' : '#F8F9FF',
+    overflowX: 'hidden'
+  }}
+>
       {/* ── Hero ── */}
-      <section style={{
-        background: 'linear-gradient(135deg, #1E1B4B 0%, #312e81 55%, #5B4CF0 100%)',
-        padding: '100px 48px 90px',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
+      <section
+  style={{
+    background: dark
+      ? 'linear-gradient(135deg, #090915 0%, #12122B 55%, #1C1C45 100%)'
+      : 'linear-gradient(135deg, #1E1B4B 0%, #312e81 55%, #5B4CF0 100%)',
+    padding: '100px 48px 90px',
+    textAlign: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+  }}
+>
         {/* Background orbs */}
         <div style={{ position: 'absolute', top: -80, right: -80, width: 350, height: 350, borderRadius: '50%', background: 'rgba(124,92,252,0.15)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, left: -60, width: 280, height: 280, borderRadius: '50%', background: 'rgba(99,102,241,0.12)', pointerEvents: 'none' }} />
@@ -79,16 +91,30 @@ function LandingPage() {
         {/* Single Get Started button */}
         <button
           onClick={() => navigate('/registrations')}
-          style={{
-            background: 'white', color: '#7C5CFC',
-            border: 'none', padding: '14px 36px',
-            borderRadius: 14, fontSize: 15, fontWeight: 700,
-            cursor: 'pointer',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)'; }}
+         style={{
+  background: dark ? '#2A2652' : 'white',
+  color: dark ? '#E9E7FF' : '#7C5CFC',
+  border: '1px solid transparent',
+  ...(dark && { borderColor: '#4C4590' }),
+  padding: '15px 40px',
+  borderRadius: 14,
+  fontSize: 15,
+  fontWeight: 700,
+  cursor: 'pointer',
+  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+  transition: 'all 0.2s',
+}}
+         onMouseEnter={e => {
+  e.currentTarget.style.transform = 'translateY(-2px)';
+  e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2)';
+  e.currentTarget.style.background = dark ? '#3A3566' : '#ffffff';
+}}
+
+onMouseLeave={e => {
+  e.currentTarget.style.transform = 'translateY(0)';
+  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+  e.currentTarget.style.background = dark ? '#2A2652' : '#ffffff';
+}}
         >
           Get Started →
         </button>
@@ -146,15 +172,37 @@ function LandingPage() {
           gap: 22, maxWidth: 980, margin: '0 auto',
         }}>
           {features.map((f, i) => (
-            <div key={i} style={{
-              background: 'white', borderRadius: 20, padding: '30px 26px',
-              border: '1px solid #ECEBFF',
-              boxShadow: '0 4px 16px rgba(124,92,252,0.06)',
-              transition: 'all 0.25s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 16px 36px rgba(124,92,252,0.14)'; e.currentTarget.style.borderColor = '#C4B5FD'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,92,252,0.06)'; e.currentTarget.style.borderColor = '#ECEBFF'; }}
-            >
+            <div
+  key={i}
+  style={{
+    background: dark ? '#1E1D3D' : '#ffffff',
+    borderRadius: 20,
+    padding: '30px 26px',
+    border: dark
+      ? '1px solid rgba(255,255,255,0.08)'
+      : '1px solid #ECEBFF',
+    boxShadow: dark
+      ? '0 8px 24px rgba(0,0,0,0.45)'
+      : '0 4px 16px rgba(124,92,252,0.06)',
+    transition: 'all 0.25s',
+  }}
+  onMouseEnter={e => {
+    e.currentTarget.style.transform = 'translateY(-6px)';
+    e.currentTarget.style.boxShadow = dark
+      ? '0 16px 36px rgba(0,0,0,0.55)'
+      : '0 16px 36px rgba(124,92,252,0.14)';
+    e.currentTarget.style.borderColor = '#C4B5FD';
+  }}
+  onMouseLeave={e => {
+    e.currentTarget.style.transform = 'translateY(0)';
+    e.currentTarget.style.boxShadow = dark
+      ? '0 8px 24px rgba(0,0,0,0.45)'
+      : '0 4px 16px rgba(124,92,252,0.06)';
+    e.currentTarget.style.borderColor = dark
+      ? 'rgba(255,255,255,0.08)'
+      : '#ECEBFF';
+  }}
+>
               <div style={{
                 width: 50, height: 50, borderRadius: 14,
                 background: 'var(--primary-bg)',
@@ -170,7 +218,12 @@ function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section style={{ padding: '88px 48px', background: 'white' }}>
+      <section
+  style={{
+    padding: '88px 48px',
+    background: dark ? '#16152F' : '#ffffff',
+  }}
+>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{
             display: 'inline-block',
@@ -223,16 +276,37 @@ function LandingPage() {
 
         <div style={{ display: 'flex', gap: 18, justifyContent: 'center', flexWrap: 'wrap' }}>
           {techStack.map((t, i) => (
-            <div key={i} style={{
-              background: 'white', borderRadius: 18, padding: '24px 32px',
-              textAlign: 'center', minWidth: 140,
-              border: '1px solid #ECEBFF',
-              boxShadow: '0 4px 16px rgba(124,92,252,0.06)',
-              transition: 'all 0.25s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(124,92,252,0.14)'; e.currentTarget.style.borderColor = '#C4B5FD'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,92,252,0.06)'; e.currentTarget.style.borderColor = '#ECEBFF'; }}
-            >
+            <div
+  key={i}
+  style={{
+    background: dark ? '#1E1D3D' : '#ffffff',
+    borderRadius: 20,
+    padding: '30px 26px',
+    border: dark
+      ? '1px solid rgba(255,255,255,0.08)'
+      : '1px solid #ECEBFF',
+    boxShadow: dark
+      ? '0 8px 24px rgba(0,0,0,0.45)'
+      : '0 4px 16px rgba(124,92,252,0.06)',
+    transition: 'all 0.25s',
+  }}
+  onMouseEnter={e => {
+    e.currentTarget.style.transform = 'translateY(-6px)';
+    e.currentTarget.style.boxShadow = dark
+      ? '0 16px 36px rgba(0,0,0,0.55)'
+      : '0 16px 36px rgba(124,92,252,0.14)';
+    e.currentTarget.style.borderColor = '#C4B5FD';
+  }}
+  onMouseLeave={e => {
+    e.currentTarget.style.transform = 'translateY(0)';
+    e.currentTarget.style.boxShadow = dark
+      ? '0 8px 24px rgba(0,0,0,0.45)'
+      : '0 4px 16px rgba(124,92,252,0.06)';
+    e.currentTarget.style.borderColor = dark
+      ? 'rgba(255,255,255,0.08)'
+      : '#ECEBFF';
+  }}
+>
               <div style={{ fontSize: 30, marginBottom: 10 }}>{t.emoji}</div>
               <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>{t.name}</div>
               <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>{t.desc}</div>
@@ -245,10 +319,15 @@ function LandingPage() {
       <section style={{
         margin: '0 48px 80px',
         padding: '56px 48px',
-        background: 'linear-gradient(135deg, #7C5CFC, #9F7AEA)',
+        background: dark
+  ? 'linear-gradient(135deg, #1B1838, #2D285A)'
+  : 'linear-gradient(135deg, #7C5CFC, #9F7AEA)',
+
         borderRadius: 28,
         textAlign: 'center',
-        boxShadow: '0 20px 50px rgba(124,92,252,0.3)',
+        boxShadow: dark
+  ? '0 20px 50px rgba(0,0,0,0.45)'
+  : '0 20px 50px rgba(124,92,252,0.3)',
         position: 'relative', overflow: 'hidden',
       }}>
         <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />

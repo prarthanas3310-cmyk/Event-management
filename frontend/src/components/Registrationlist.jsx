@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../ThemeContext';
 
 const API = 'http://localhost:3000/registrations';
 const PAGE_SIZE = 5;
@@ -24,6 +25,7 @@ function RegistrationList() {
   const [sortDir, setSortDir] = useState('asc');
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const { dark, toggle } = useTheme();
 
   const fetchAll = async () => {
     setLoading(true);
@@ -100,6 +102,8 @@ function RegistrationList() {
   const paidCount    = registrations.filter(r => r.paymentStatus === 'Paid').length;
   const unpaidCount  = registrations.filter(r => r.paymentStatus !== 'Paid').length;
 
+  const username = localStorage.getItem('username') || 'Admin';
+
   const formatDate = (date) => {
     if (!date) return '—';
     return new Date(date).toLocaleDateString('en-IN', {
@@ -171,20 +175,32 @@ function RegistrationList() {
   return (
     <div>
 
-      {/* ── SINGLE dashboard header (no duplicate) ── */}
+      {/* ── Dashboard header ── */}
       <div className="dashboard-header">
         <div>
           <h1>Event Dashboard 👋</h1>
           <p>Manage registrations, events and attendees effortlessly</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button className="header-icon-btn" title="Toggle dark mode">🌙</button>
+          <button className="header-icon-btn" onClick={toggle} title="Toggle dark mode">
+            {dark ? '☀️' : '🌙'}
+          </button>
           <button className="header-icon-btn" title="Notifications">🔔</button>
+
+          {/* ── Profile chip with purple avatar circle ── */}
           <div className="profile-chip">
-            <div className="profile-avatar">A</div>
+            <div style={{
+              width: 38, height: 38, borderRadius: '50%',
+              background: 'linear-gradient(135deg, #818cf8, #6d28d9)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 15, fontWeight: 700, color: 'white', flexShrink: 0,
+              boxShadow: '0 4px 12px rgba(109,40,217,0.4)',
+            }}>
+              {username.charAt(0).toUpperCase()}
+            </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>Admin</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Event Manager</div>
+              <div style={{ fontWeight: 700 }}>{username}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Event Manager</div>
             </div>
           </div>
         </div>
