@@ -110,19 +110,19 @@ Frontend-backend integration
 ## 🖼️ Screenshots
 
 ### 🌙 Dark Mode
-![Dark Mode](./frontend/src/components/screenshots/darkmode.png)
+![Dark Mode](./screenshots/darkmode.png)
 
-### 📊 Events Dashboard
-![Dashboard](./frontend/src/components/screenshots/dashboard.png)
+### 📊 Dashboard
+![Dashboard](./screenshots/dashboard.png)
 
 ### ✏️ Edit Registration
-![Edit Registration](./frontend/src/components/screenshots/editreg.png)
+![Edit Registration](./screenshots/editreg.png)
 
 ### 🏠 Home Page
-![Home Page](./frontend/src/components/screenshots/home.png)
+![Home Page](./screenshots/home.png)
 
 ### 🔐 Login Page
-![Login Page](./frontend/src/components/screenshots/login.png)
+![Login Page](./screenshots/login.png)
 
 ### 📝 Registration Page
-![Registration Page](./frontend/src/components/screenshots/registration.png)
+![Registration Page](./screenshots/registration.png)
