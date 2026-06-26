@@ -109,14 +109,20 @@ Database modeling
 Frontend-backend integration
 ## 🖼️ Screenshots
 
+### 🌙 Dark Mode
+![Dark Mode](./frontend/src/components/screenshots/darkmode.png)
+
+### 📊 Events Dashboard
+![Dashboard](./frontend/src/components/screenshots/dashboard.png)
+
+### ✏️ Edit Registration
+![Edit Registration](./frontend/src/components/screenshots/editreg.png)
+
 ### 🏠 Home Page
-![Home Page](./screenshots/home.png)
+![Home Page](./frontend/src/components/screenshots/home.png)
 
-### 📅 Events Dashboard
-![Dashboard](./screenshots/dashboard.png)
+### 🔐 Login Page
+![Login Page](./frontend/src/components/screenshots/login.png)
 
-### 🎟️ Registration Page
-![Registration](./screenshots/registration.png)
-
-### 🌗 Dark Mode
-![Dark Mode](./screenshots/darkmode.png)
+### 📝 Registration Page
+![Registration Page](./frontend/src/components/screenshots/registration.png)
