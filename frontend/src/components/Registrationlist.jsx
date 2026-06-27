@@ -27,6 +27,11 @@ function RegistrationList() {
   const navigate = useNavigate();
   const { dark, toggle } = useTheme();
 
+  const username = localStorage.getItem('username') || 'Admin';
+  const role = localStorage.getItem('role') || 'viewer';
+  const isAdmin = role === 'admin';
+  const token = localStorage.getItem('token');
+
   const fetchAll = async () => {
     setLoading(true);
     try {
@@ -52,7 +57,10 @@ function RegistrationList() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     try {
-      await fetch(`${API}/${deleteTarget.id}`, { method: 'DELETE' });
+      await fetch(`${API}/${deleteTarget.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
       setRegistrations((prev) => prev.filter((r) => r._id !== deleteTarget.id));
       showToast('Registration deleted successfully.');
     } catch {
@@ -101,8 +109,6 @@ function RegistrationList() {
   const totalTickets = registrations.reduce((s, r) => s + (r.ticketCount || 0), 0);
   const paidCount    = registrations.filter(r => r.paymentStatus === 'Paid').length;
   const unpaidCount  = registrations.filter(r => r.paymentStatus !== 'Paid').length;
-
-  const username = localStorage.getItem('username') || 'Admin';
 
   const formatDate = (date) => {
     if (!date) return '—';
@@ -186,8 +192,6 @@ function RegistrationList() {
             {dark ? '☀️' : '🌙'}
           </button>
           <button className="header-icon-btn" title="Notifications">🔔</button>
-
-          {/* ── Profile chip with purple avatar circle ── */}
           <div className="profile-chip">
             <div style={{
               width: 38, height: 38, borderRadius: '50%',
@@ -200,11 +204,26 @@ function RegistrationList() {
             </div>
             <div>
               <div style={{ fontWeight: 700 }}>{username}</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Event Manager</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                {isAdmin ? 'Administrator' : 'Viewer'}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* ── Viewer banner ── */}
+      {!isAdmin && (
+        <div style={{
+          background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)',
+          border: '1px solid #FCD34D',
+          borderRadius: 16, padding: '12px 20px',
+          marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10,
+          fontSize: 14, fontWeight: 500, color: '#92400E',
+        }}>
+          👁️ <strong>Viewer Mode</strong> — You can view and export data but cannot add, edit or delete registrations.
+        </div>
+      )}
 
       {/* ── Page title + illustration ── */}
       <div className="page-title-row">
@@ -243,9 +262,11 @@ function RegistrationList() {
           <h2>Welcome Back 👋</h2>
           <p>Manage registrations, track attendees, and monitor event performance from one place.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => navigate('/add')}>
-          + New Registration
-        </button>
+        {isAdmin && (
+          <button className="btn btn-primary" onClick={() => navigate('/add')}>
+            + New Registration
+          </button>
+        )}
       </div>
 
       {/* ── Stats ── */}
@@ -325,7 +346,7 @@ function RegistrationList() {
                     <th style={{ minWidth: 130, ...thStyle('Date') }} onClick={() => handleSort('Date')}>Event Date {sortIcon('Date')}</th>
                     <th style={{ minWidth: 110, ...thStyle('roomNo') }} onClick={() => handleSort('roomNo')}>Room No {sortIcon('roomNo')}</th>
                     <th style={{ minWidth: 130, ...thStyle('paymentStatus') }} onClick={() => handleSort('paymentStatus')}>Payment Status {sortIcon('paymentStatus')}</th>
-                    <th style={{ minWidth: 160 }}>Actions</th>
+                    {isAdmin && <th style={{ minWidth: 160 }}>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -372,12 +393,14 @@ function RegistrationList() {
                               {reg.paymentStatus}
                             </span>
                           </td>
-                          <td>
-                            <div className="actions-cell">
-                              <button className="btn btn-edit" onClick={() => navigate(`/edit/${reg._id}`)}>✏️ Edit</button>
-                              <button className="btn btn-delete" onClick={() => setDeleteTarget({ id: reg._id, name: reg.userName })}>🗑️ Delete</button>
-                            </div>
-                          </td>
+                          {isAdmin && (
+                            <td>
+                              <div className="actions-cell">
+                                <button className="btn btn-edit" onClick={() => navigate(`/edit/${reg._id}`)}>✏️ Edit</button>
+                                <button className="btn btn-delete" onClick={() => setDeleteTarget({ id: reg._id, name: reg.userName })}>🗑️ Delete</button>
+                              </div>
+                            </td>
+                          )}
                         </tr>
                       );
                     })
@@ -406,7 +429,7 @@ function RegistrationList() {
         )}
       </div>
 
-      {deleteTarget && (
+      {isAdmin && deleteTarget && (
         <div className="modal-overlay">
           <div className="modal-box">
             <div className="modal-icon-wrap">⚠️</div>

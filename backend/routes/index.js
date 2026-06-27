@@ -1,18 +1,38 @@
 var express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
 
 const Registration = require('../models/Registration');
 const Event = require('../models/Event');
 
+const SECRET = process.env.JWT_SECRET || 'your_secret_key_here';
+
+// Middleware to check if user is admin
+function adminOnly(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied. Admin only.' });
+    }
+    req.user = decoded;
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
 /* ─── EVENT ROUTES ─── */
 
-// CREATE Event
-router.post('/events', async (req, res) => {
+// CREATE Event — admin only
+router.post('/events', adminOnly, async (req, res) => {
   try {
     const event = new Event({
       name: req.body.name,
       date: req.body.date,
-      rooms: req.body.rooms // [{ roomNo, capacity }]
+      rooms: req.body.rooms
     });
     await event.save();
     res.json({ message: "Event created", event });
@@ -21,7 +41,7 @@ router.post('/events', async (req, res) => {
   }
 });
 
-// GET All Events
+// GET All Events — anyone
 router.get('/events', async (req, res) => {
   try {
     const events = await Event.find();
@@ -31,7 +51,7 @@ router.get('/events', async (req, res) => {
   }
 });
 
-// GET Event by ID
+// GET Event by ID — anyone
 router.get('/events/:id', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -43,12 +63,11 @@ router.get('/events/:id', async (req, res) => {
 
 /* ─── REGISTRATION ROUTES ─── */
 
-// CREATE Registration (with seat check)
-router.post('/registrations', async (req, res) => {
+// CREATE Registration — admin only
+router.post('/registrations', adminOnly, async (req, res) => {
   try {
     const { eventId, roomNo, ticketCount } = req.body;
 
-    // Find event and check room availability
     const event = await Event.findById(eventId);
     if (!event) return res.status(404).json({ error: "Event not found" });
 
@@ -62,11 +81,9 @@ router.post('/registrations', async (req, res) => {
       });
     }
 
-    // Deduct seats
     room.bookedSeats += Number(ticketCount);
     await event.save();
 
-    // Save registration
     const registration = new Registration({
       userName: req.body.userName,
       ticketCount: Number(ticketCount),
@@ -86,13 +103,13 @@ router.post('/registrations', async (req, res) => {
   }
 });
 
-// GET All Registrations
+// GET All Registrations — anyone
 router.get('/registrations', async (req, res) => {
   let registrations = await Registration.find();
   res.json(registrations);
 });
 
-// SEARCH Registration
+// SEARCH Registration — anyone
 router.get('/registrations/search/:key', async (req, res) => {
   const key = req.params.key;
   const dateSearch = new Date(key);
@@ -104,7 +121,7 @@ router.get('/registrations/search/:key', async (req, res) => {
       { contact: { $regex: key, $options: "i" } },
       { paymentStatus: { $regex: key, $options: "i" } },
       { NameofEvent: { $regex: key, $options: "i" } },
-      { roomNo: { $regex: key, $options: "i" } }  // NEW
+      { roomNo: { $regex: key, $options: "i" } }
     ]
   };
 
@@ -120,14 +137,14 @@ router.get('/registrations/search/:key', async (req, res) => {
   res.json(result);
 });
 
-// GET Registration By ID
+// GET Registration By ID — anyone
 router.get('/registrations/:id', async (req, res) => {
   let registration = await Registration.findById(req.params.id);
   res.json(registration);
 });
 
-// UPDATE Registration (with seat adjustment)
-router.put('/registrations/:id', async (req, res) => {
+// UPDATE Registration — admin only
+router.put('/registrations/:id', adminOnly, async (req, res) => {
   try {
     const old = await Registration.findById(req.params.id);
     const { eventId, roomNo, ticketCount } = req.body;
@@ -138,7 +155,6 @@ router.put('/registrations/:id', async (req, res) => {
     const room = event.rooms.find(r => r.roomNo === roomNo);
     if (!room) return res.status(404).json({ error: "Room not found" });
 
-    // Refund old seats if same room, then check new count
     const isSameRoom = old.eventId?.toString() === eventId && old.roomNo === roomNo;
     const refund = isSameRoom ? old.ticketCount : 0;
     const available = room.capacity - room.bookedSeats + refund;
@@ -149,7 +165,6 @@ router.put('/registrations/:id', async (req, res) => {
       });
     }
 
-    // Adjust seats on old room if room changed
     if (!isSameRoom && old.eventId) {
       const oldEvent = await Event.findById(old.eventId);
       if (oldEvent) {
@@ -180,8 +195,8 @@ router.put('/registrations/:id', async (req, res) => {
   }
 });
 
-// DELETE Registration (refund seats)
-router.delete('/registrations/:id', async (req, res) => {
+// DELETE Registration — admin only
+router.delete('/registrations/:id', adminOnly, async (req, res) => {
   try {
     const reg = await Registration.findById(req.params.id);
     if (reg && reg.eventId) {
