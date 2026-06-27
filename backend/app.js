@@ -12,7 +12,9 @@ const authRoutes = require('./routes/auth'); // NEW
 
 var app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://event-management-peach-five.vercel.app'
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
