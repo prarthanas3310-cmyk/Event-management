@@ -24,9 +24,13 @@ function AddEvent() {
     }
     setSaving(true);
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(EVENTS_API, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify({
           name, date,
           rooms: rooms.map(r => ({ roomNo: r.roomNo, capacity: Number(r.capacity) })),
@@ -54,22 +58,15 @@ function AddEvent() {
           <p className="form-subtitle">Create an event with rooms and seat limits</p>
         </div>
 
-        {/* Floating calendar illustration */}
         <div className="page-illustration">
           <svg viewBox="0 0 170 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Back calendar (shadow) */}
             <rect x="42" y="24" width="86" height="90" rx="14" fill="#C4B5FD" opacity="0.4" transform="rotate(-6 42 24)" />
-            {/* Main calendar */}
             <rect x="28" y="28" width="90" height="90" rx="14" fill="white" stroke="#E5E7EB" strokeWidth="1.5" />
-            {/* Header */}
             <rect x="28" y="28" width="90" height="28" rx="14" fill="#7C5CFC" />
             <rect x="28" y="42" width="90" height="14" fill="#7C5CFC" />
-            {/* Binding rings */}
             <rect x="50" y="20" width="8" height="18" rx="4" fill="#6548F7" />
             <rect x="88" y="20" width="8" height="18" rx="4" fill="#6548F7" />
-            {/* Month label */}
             <text x="55" y="45" fontSize="10" fill="white" fontWeight="700">JUNE 2026</text>
-            {/* Day grid */}
             {[0,1,2,3,4,5,6].map(d => (
               <text key={d} x={36 + d * 12} y={72} fontSize="7" fill="#9CA3AF">{['S','M','T','W','T','F','S'][d]}</text>
             ))}
@@ -86,10 +83,8 @@ function AddEvent() {
                 </g>
               );
             })}
-            {/* Star badge */}
             <circle cx="132" cy="52" r="22" fill="#FEF3C7" />
             <text x="120" y="59" fontSize="20">⭐</text>
-            {/* Sparkles */}
             <text x="140" y="28" fontSize="12">✨</text>
             <text x="14" y="90" fontSize="10" opacity="0.5">✦</text>
             <text x="150" y="100" fontSize="10" opacity="0.4">✦</text>
@@ -139,7 +134,6 @@ function AddEvent() {
             style={{ marginTop: 4, fontSize: 13 }}>+ Add Room</button>
         </div>
 
-        {/* Make every event count card */}
         <div className="event-count-card">
           <div>
             <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--primary)', marginBottom: 4 }}>

@@ -22,30 +22,38 @@ function EditRegistration() {
 
   useEffect(() => {
     const load = async () => {
-      const [evRes, regRes] = await Promise.all([
-        fetch(EVENTS_API), fetch(`${API}/${id}`)
-      ]);
-      const evData = await evRes.json();
-      const reg = await regRes.json();
-      setEvents(evData);
+      try {
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
+        const [evRes, regRes] = await Promise.all([
+          fetch(EVENTS_API, { headers }),
+          fetch(`${API}/${id}`, { headers })
+        ]);
+        const evData = await evRes.json();
+        const reg = await regRes.json();
+        setEvents(evData);
 
-      const event = evData.find(ev => ev._id === reg.eventId);
-      setSelectedEvent(event || null);
-      const room = event?.rooms.find(r => r.roomNo === reg.roomNo);
-      setSelectedRoom(room || null);
-      setOriginalTickets(reg.ticketCount);
+        const event = evData.find(ev => ev._id === reg.eventId);
+        setSelectedEvent(event || null);
+        const room = event?.rooms.find(r => r.roomNo === reg.roomNo);
+        setSelectedRoom(room || null);
+        setOriginalTickets(reg.ticketCount);
 
-      setForm({
-        userName: reg.userName || '',
-        ticketCount: reg.ticketCount || '',
-        contact: reg.contact || '',
-        paymentStatus: reg.paymentStatus || 'Not Paid',
-        NameofEvent: reg.NameofEvent || '',
-        Date: reg.Date ? new Date(reg.Date).toISOString().split('T')[0] : '',
-        roomNo: reg.roomNo || '',
-        eventId: reg.eventId || '',
-      });
-      setLoading(false);
+        setForm({
+          userName: reg.userName || '',
+          ticketCount: reg.ticketCount || '',
+          contact: reg.contact || '',
+          paymentStatus: reg.paymentStatus || 'Not Paid',
+          NameofEvent: reg.NameofEvent || '',
+          Date: reg.Date ? new Date(reg.Date).toISOString().split('T')[0] : '',
+          roomNo: reg.roomNo || '',
+          eventId: reg.eventId || '',
+        });
+      } catch (err) {
+        console.error('Failed to load:', err);
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, [id]);
@@ -92,15 +100,15 @@ function EditRegistration() {
     setError('');
     setSaving(true);
     try {
-     const token = localStorage.getItem('token');
-const res = await fetch(API, {
-  method: 'PUT',
-  headers: { 
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  },
-  body: JSON.stringify({ ...form, ticketCount: Number(form.ticketCount) }),
-});
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API}/${id}`, {   // ← fixed: was missing /${id}
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ ...form, ticketCount: Number(form.ticketCount) }),
+      });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Failed to update'); return; }
       navigate('/registrations');
@@ -122,37 +130,29 @@ const res = await fetch(API, {
     <div className="form-page">
       <button className="back-btn" onClick={() => navigate('/registrations')}>← Back</button>
 
-      {/* Title row with edit illustration */}
       <div className="page-title-row">
         <div className="form-header">
           <h1 className="form-title">Edit Registration</h1>
           <p className="form-subtitle">Update the registration details below</p>
         </div>
 
-        {/* Pencil / edit illustration */}
         <div className="page-illustration">
           <svg viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Document */}
             <rect x="20" y="20" width="90" height="110" rx="14" fill="#EDE9FE" />
             <rect x="20" y="20" width="90" height="110" rx="14" stroke="#C4B5FD" strokeWidth="1.5" />
-            {/* Lines */}
             <rect x="34" y="48" width="62" height="6" rx="3" fill="#C4B5FD" />
             <rect x="34" y="62" width="50" height="6" rx="3" fill="#DDD6FE" />
             <rect x="34" y="76" width="58" height="6" rx="3" fill="#DDD6FE" />
             <rect x="34" y="90" width="42" height="6" rx="3" fill="#EDE9FE" />
             <rect x="34" y="104" width="54" height="6" rx="3" fill="#EDE9FE" />
-            {/* Folded top corner */}
             <path d="M86 20 L110 20 L110 44 Z" fill="#C4B5FD" opacity="0.6" />
-            {/* Large pencil overlapping */}
             <g transform="rotate(-20 125 95)">
               <rect x="112" y="52" width="14" height="56" rx="4" fill="#F59E0B" />
               <rect x="112" y="50" width="14" height="8" rx="2" fill="#9CA3AF" />
               <polygon points="112,108 126,108 119,124" fill="#1E1B4B" />
               <rect x="115" y="108" width="8" height="4" fill="#FCA5A5" />
-              {/* Pencil shine */}
               <rect x="114" y="56" width="3" height="40" rx="1.5" fill="rgba(255,255,255,0.4)" />
             </g>
-            {/* Sparkles */}
             <text x="8" y="36" fontSize="13">✨</text>
             <text x="138" y="30" fontSize="10">✦</text>
             <text x="14" y="118" fontSize="9" opacity="0.4">✦</text>
