@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
-import RegistrationList from './components/registrationlist';
-import AddRegistration from './components/addregistration';
-import EditRegistration from './components/editregistration';
+import RegistrationList from './components/Registrationlist';
+import AddRegistration from './components/Addregistration';
+import EditRegistration from './components/Editregistration';
 import AddEvent from './components/AddEvent';
 import Login from './components/Login';
 import { ThemeProvider } from './ThemeContext';
