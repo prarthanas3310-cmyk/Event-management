@@ -34,27 +34,160 @@ function LandingPage() {
   ];
 
   return (
-   <div
-  className="landing-page"
-  style={{
-    fontFamily: "'Poppins', sans-serif",
-    color: dark ? '#E9E7FF' : '#1E1B4B',
-    background: dark ? '#0F0E2A' : '#F8F9FF',
-    overflowX: 'hidden'
-  }}
->
+    <div
+      className="landing-page"
+      style={{
+        fontFamily: "'Poppins', sans-serif",
+        color: dark ? '#E9E7FF' : '#1E1B4B',
+        background: dark ? '#0F0E2A' : '#F8F9FF',
+        overflowX: 'hidden'
+      }}
+    >
+      {/* Mobile responsive styles */}
+      <style>{`
+        .hero-section {
+          padding: 100px 48px 90px;
+        }
+        .hero-title {
+          font-size: 56px;
+          font-weight: 800;
+          color: white;
+          margin: 0 0 20px;
+          letter-spacing: -0.04em;
+          line-height: 1.1;
+        }
+        .hero-subtitle {
+          font-size: 17px;
+          color: rgba(255,255,255,0.65);
+          max-width: 520px;
+          margin: 0 auto 48px;
+          line-height: 1.75;
+          font-weight: 400;
+        }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+          max-width: 900px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 22px;
+          max-width: 980px;
+          margin: 0 auto;
+        }
+        .steps-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 40px;
+          max-width: 880px;
+          margin: 0 auto;
+          position: relative;
+        }
+        .connector-line {
+          position: absolute;
+          top: 30px;
+          left: 16%;
+          right: 16%;
+          height: 2px;
+          background: linear-gradient(90deg, #7C5CFC, #A78BFA);
+          opacity: 0.25;
+          z-index: 0;
+        }
+        .tech-grid {
+          display: flex;
+          gap: 18px;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .cta-section {
+          margin: 0 48px 80px;
+          padding: 56px 48px;
+        }
+        .cta-title {
+          font-size: 32px;
+          font-weight: 800;
+          color: white;
+          margin: 0 0 12px;
+          letter-spacing: -0.03em;
+        }
+        .section-padding {
+          padding: 88px 48px;
+        }
+        .stats-strip-padding {
+          padding: 32px 48px;
+        }
+
+        @media (max-width: 768px) {
+          .hero-section {
+            padding: 60px 20px 50px !important;
+          }
+          .hero-title {
+            font-size: 30px !important;
+            letter-spacing: -0.02em !important;
+          }
+          .hero-subtitle {
+            font-size: 14px !important;
+            margin: 0 auto 32px !important;
+          }
+          .stats-strip-padding {
+            padding: 20px 16px !important;
+          }
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .section-padding {
+            padding: 50px 16px !important;
+          }
+          .features-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+          }
+          .steps-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+          .connector-line {
+            display: none !important;
+          }
+          .tech-grid {
+            gap: 12px !important;
+          }
+          .cta-section {
+            margin: 0 12px 40px !important;
+            padding: 32px 20px !important;
+          }
+          .cta-title {
+            font-size: 22px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 26px !important;
+          }
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+      `}</style>
+
       {/* ── Hero ── */}
       <section
-  style={{
-    background: dark
-      ? 'linear-gradient(135deg, #090915 0%, #12122B 55%, #1C1C45 100%)'
-      : 'linear-gradient(135deg, #1E1B4B 0%, #312e81 55%, #5B4CF0 100%)',
-    padding: '100px 48px 90px',
-    textAlign: 'center',
-    position: 'relative',
-    overflow: 'hidden',
-  }}
->
+        className="hero-section"
+        style={{
+          background: dark
+            ? 'linear-gradient(135deg, #090915 0%, #12122B 55%, #1C1C45 100%)'
+            : 'linear-gradient(135deg, #1E1B4B 0%, #312e81 55%, #5B4CF0 100%)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
         {/* Background orbs */}
         <div style={{ position: 'absolute', top: -80, right: -80, width: 350, height: 350, borderRadius: '50%', background: 'rgba(124,92,252,0.15)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, left: -60, width: 280, height: 280, borderRadius: '50%', background: 'rgba(99,102,241,0.12)', pointerEvents: 'none' }} />
@@ -70,56 +203,43 @@ function LandingPage() {
           <span style={{ fontSize: 14, color: '#A78BFA', fontWeight: 700, letterSpacing: '0.04em' }}>✦ MERN Stack Project</span>
         </div>
 
-        <h1 style={{
-          fontSize: 56, fontWeight: 800,
-          color: 'white', margin: '0 0 20px',
-          letterSpacing: '-0.04em', lineHeight: 1.1,
-        }}>
+        <h1 className="hero-title">
           Event Registration<br />
           <span style={{ color: '#A78BFA' }}>Management System</span>
         </h1>
 
-        <p style={{
-          fontSize: 17, color: 'rgba(255,255,255,0.65)',
-          maxWidth: 520, margin: '0 auto 48px',
-          lineHeight: 1.75, fontWeight: 400,
-        }}>
+        <p className="hero-subtitle">
           A professional full-stack web application to manage event attendees,
           track payments, and generate reports — all in one place.
         </p>
 
-        {/* Single Get Started button */}
         <button
           onClick={() => navigate('/registrations')}
-         style={{
-  background: dark ? '#2A2652' : 'white',
-  color: dark ? '#E9E7FF' : '#7C5CFC',
-  border: '1px solid transparent',
-  ...(dark && { borderColor: '#4C4590' }),
-  padding: '15px 40px',
-  borderRadius: 14,
-  fontSize: 15,
-  fontWeight: 700,
-  cursor: 'pointer',
-  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-  transition: 'all 0.2s',
-}}
-         onMouseEnter={e => {
-  e.currentTarget.style.transform = 'translateY(-2px)';
-  e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2)';
-  e.currentTarget.style.background = dark ? '#3A3566' : '#ffffff';
-}}
-
-onMouseLeave={e => {
-  e.currentTarget.style.transform = 'translateY(0)';
-  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
-  e.currentTarget.style.background = dark ? '#2A2652' : '#ffffff';
-}}
+          style={{
+            background: dark ? '#2A2652' : 'white',
+            color: dark ? '#E9E7FF' : '#7C5CFC',
+            border: '1px solid transparent',
+            ...(dark && { borderColor: '#4C4590' }),
+            padding: '15px 40px',
+            borderRadius: 14,
+            fontSize: 15,
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+          }}
         >
           Get Started →
         </button>
 
-        {/* Floating illustration in hero */}
         <div style={{ position: 'absolute', top: 32, right: 60, opacity: 0.18, pointerEvents: 'none' }}>
           <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
             <circle cx="90" cy="90" r="80" stroke="white" strokeWidth="2" strokeDasharray="8 6" />
@@ -130,15 +250,14 @@ onMouseLeave={e => {
       </section>
 
       {/* ── Stats strip ── */}
-      <section style={{
-        background: 'linear-gradient(135deg, #1E1B4B, #312e81)',
-        padding: '32px 48px',
-        borderBottom: '1px solid rgba(124,92,252,0.2)',
-      }}>
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 16, maxWidth: 900, margin: '0 auto', textAlign: 'center',
-        }}>
+      <section
+        className="stats-strip-padding"
+        style={{
+          background: 'linear-gradient(135deg, #1E1B4B, #312e81)',
+          borderBottom: '1px solid rgba(124,92,252,0.2)',
+        }}
+      >
+        <div className="stats-grid">
           {stats.map((s, i) => (
             <div key={i}>
               <div style={{ fontSize: 24, fontWeight: 800, color: '#A78BFA', letterSpacing: '-0.02em' }}>{s.value}</div>
@@ -149,7 +268,7 @@ onMouseLeave={e => {
       </section>
 
       {/* ── Features ── */}
-      <section style={{ padding: '88px 48px', background: 'var(--bg-page)' }}>
+      <section className="section-padding" style={{ background: 'var(--bg-page)' }}>
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{
             display: 'inline-block',
@@ -167,42 +286,27 @@ onMouseLeave={e => {
           </p>
         </div>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 22, maxWidth: 980, margin: '0 auto',
-        }}>
+        <div className="features-grid">
           {features.map((f, i) => (
             <div
-  key={i}
-  style={{
-    background: dark ? '#1E1D3D' : '#ffffff',
-    borderRadius: 20,
-    padding: '30px 26px',
-    border: dark
-      ? '1px solid rgba(255,255,255,0.08)'
-      : '1px solid #ECEBFF',
-    boxShadow: dark
-      ? '0 8px 24px rgba(0,0,0,0.45)'
-      : '0 4px 16px rgba(124,92,252,0.06)',
-    transition: 'all 0.25s',
-  }}
-  onMouseEnter={e => {
-    e.currentTarget.style.transform = 'translateY(-6px)';
-    e.currentTarget.style.boxShadow = dark
-      ? '0 16px 36px rgba(0,0,0,0.55)'
-      : '0 16px 36px rgba(124,92,252,0.14)';
-    e.currentTarget.style.borderColor = '#C4B5FD';
-  }}
-  onMouseLeave={e => {
-    e.currentTarget.style.transform = 'translateY(0)';
-    e.currentTarget.style.boxShadow = dark
-      ? '0 8px 24px rgba(0,0,0,0.45)'
-      : '0 4px 16px rgba(124,92,252,0.06)';
-    e.currentTarget.style.borderColor = dark
-      ? 'rgba(255,255,255,0.08)'
-      : '#ECEBFF';
-  }}
->
+              key={i}
+              style={{
+                background: dark ? '#1E1D3D' : '#ffffff',
+                borderRadius: 20,
+                padding: '30px 26px',
+                border: dark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #ECEBFF',
+                boxShadow: dark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 16px rgba(124,92,252,0.06)',
+                transition: 'all 0.25s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.borderColor = '#C4B5FD';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = dark ? 'rgba(255,255,255,0.08)' : '#ECEBFF';
+              }}
+            >
               <div style={{
                 width: 50, height: 50, borderRadius: 14,
                 background: 'var(--primary-bg)',
@@ -219,11 +323,9 @@ onMouseLeave={e => {
 
       {/* ── How it works ── */}
       <section
-  style={{
-    padding: '88px 48px',
-    background: dark ? '#16152F' : '#ffffff',
-  }}
->
+        className="section-padding"
+        style={{ background: dark ? '#16152F' : '#ffffff' }}
+      >
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{
             display: 'inline-block',
@@ -238,13 +340,8 @@ onMouseLeave={e => {
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, maxWidth: 880, margin: '0 auto', position: 'relative' }}>
-          {/* Connector line */}
-          <div style={{
-            position: 'absolute', top: 30, left: '16%', right: '16%', height: 2,
-            background: 'linear-gradient(90deg, #7C5CFC, #A78BFA)',
-            opacity: 0.25, zIndex: 0,
-          }} />
+        <div className="steps-grid">
+          <div className="connector-line" />
           {steps.map((s, i) => (
             <div key={i} style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
               <div style={{
@@ -264,7 +361,7 @@ onMouseLeave={e => {
       </section>
 
       {/* ── Tech stack ── */}
-      <section style={{ padding: '72px 48px', background: 'var(--bg-page)' }}>
+      <section className="section-padding" style={{ background: 'var(--bg-page)', paddingTop: 72, paddingBottom: 72 }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <h2 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 10px', letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
             Built with the MERN Stack
@@ -274,39 +371,28 @@ onMouseLeave={e => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: 18, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="tech-grid">
           {techStack.map((t, i) => (
             <div
-  key={i}
-  style={{
-    background: dark ? '#1E1D3D' : '#ffffff',
-    borderRadius: 20,
-    padding: '30px 26px',
-    border: dark
-      ? '1px solid rgba(255,255,255,0.08)'
-      : '1px solid #ECEBFF',
-    boxShadow: dark
-      ? '0 8px 24px rgba(0,0,0,0.45)'
-      : '0 4px 16px rgba(124,92,252,0.06)',
-    transition: 'all 0.25s',
-  }}
-  onMouseEnter={e => {
-    e.currentTarget.style.transform = 'translateY(-6px)';
-    e.currentTarget.style.boxShadow = dark
-      ? '0 16px 36px rgba(0,0,0,0.55)'
-      : '0 16px 36px rgba(124,92,252,0.14)';
-    e.currentTarget.style.borderColor = '#C4B5FD';
-  }}
-  onMouseLeave={e => {
-    e.currentTarget.style.transform = 'translateY(0)';
-    e.currentTarget.style.boxShadow = dark
-      ? '0 8px 24px rgba(0,0,0,0.45)'
-      : '0 4px 16px rgba(124,92,252,0.06)';
-    e.currentTarget.style.borderColor = dark
-      ? 'rgba(255,255,255,0.08)'
-      : '#ECEBFF';
-  }}
->
+              key={i}
+              style={{
+                background: dark ? '#1E1D3D' : '#ffffff',
+                borderRadius: 20,
+                padding: '30px 26px',
+                border: dark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #ECEBFF',
+                boxShadow: dark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 16px rgba(124,92,252,0.06)',
+                transition: 'all 0.25s',
+                minWidth: 130, textAlign: 'center',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.borderColor = '#C4B5FD';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = dark ? 'rgba(255,255,255,0.08)' : '#ECEBFF';
+              }}
+            >
               <div style={{ fontSize: 30, marginBottom: 10 }}>{t.emoji}</div>
               <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>{t.name}</div>
               <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>{t.desc}</div>
@@ -315,24 +401,24 @@ onMouseLeave={e => {
         </div>
       </section>
 
-      {/* ── CTA Banner (no button) ── */}
-      <section style={{
-        margin: '0 48px 80px',
-        padding: '56px 48px',
-        background: dark
-  ? 'linear-gradient(135deg, #1B1838, #2D285A)'
-  : 'linear-gradient(135deg, #7C5CFC, #9F7AEA)',
-
-        borderRadius: 28,
-        textAlign: 'center',
-        boxShadow: dark
-  ? '0 20px 50px rgba(0,0,0,0.45)'
-  : '0 20px 50px rgba(124,92,252,0.3)',
-        position: 'relative', overflow: 'hidden',
-      }}>
+      {/* ── CTA Banner ── */}
+      <section
+        className="cta-section"
+        style={{
+          background: dark
+            ? 'linear-gradient(135deg, #1B1838, #2D285A)'
+            : 'linear-gradient(135deg, #7C5CFC, #9F7AEA)',
+          borderRadius: 28,
+          textAlign: 'center',
+          boxShadow: dark
+            ? '0 20px 50px rgba(0,0,0,0.45)'
+            : '0 20px 50px rgba(124,92,252,0.3)',
+          position: 'relative', overflow: 'hidden',
+        }}
+      >
         <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -60, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
-        <h2 style={{ fontSize: 32, fontWeight: 800, color: 'white', margin: '0 0 12px', letterSpacing: '-0.03em' }}>
+        <h2 className="cta-title">
           Ready to manage your events? 🚀
         </h2>
         <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', margin: '0 auto', maxWidth: 440, lineHeight: 1.7 }}>
