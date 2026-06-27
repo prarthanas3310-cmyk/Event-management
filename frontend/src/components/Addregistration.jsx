@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API = 'http://localhost:3000/registrations';
-const EVENTS_API = 'http://localhost:3000/events';
+const API = `${import.meta.env.VITE_API_URL}/registrations`;
+const EVENTS_API = `${import.meta.env.VITE_API_URL}/events`;
 
 function AddRegistration() {
   const navigate = useNavigate();

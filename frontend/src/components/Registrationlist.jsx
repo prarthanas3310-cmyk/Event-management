@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../ThemeContext';
 
-const API = 'http://localhost:3000/registrations';
+const API = `${import.meta.env.VITE_API_URL}/registrations`;
 const PAGE_SIZE = 5;
 
 function getAvatar(name = '') {

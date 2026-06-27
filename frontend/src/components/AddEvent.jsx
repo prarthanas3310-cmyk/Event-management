@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const EVENTS_API = 'http://localhost:3000/events';
+const EVENTS_API = `${import.meta.env.VITE_API_URL}/events`;
 
 function AddEvent() {
   const navigate = useNavigate();
