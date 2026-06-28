@@ -6,10 +6,13 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('role');
     navigate('/login');
   };
 
   const username = localStorage.getItem('username');
+  const role = localStorage.getItem('role') || 'viewer';
+  const isAdmin = role === 'admin';
 
   return (
     <aside className="sidebar">
@@ -43,7 +46,9 @@ function Navbar() {
           </div>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'white' }}>{username}</div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>Administrator</div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
+              {isAdmin ? 'Administrator' : 'Member'}
+            </div>
           </div>
         </div>
       )}
@@ -71,13 +76,16 @@ function Navbar() {
           Add Registration
         </NavLink>
 
-        <NavLink
-          to="/add-event"
-          className={({ isActive }) => 'nav-item' + (isActive ? ' nav-item--active' : '')}
-        >
-          <span className="nav-icon">📅</span>
-          Add Event
-        </NavLink>
+        {/* Only admin can see Add Event */}
+        {isAdmin && (
+          <NavLink
+            to="/add-event"
+            className={({ isActive }) => 'nav-item' + (isActive ? ' nav-item--active' : '')}
+          >
+            <span className="nav-icon">📅</span>
+            Add Event
+          </NavLink>
+        )}
       </nav>
 
       {/* Motivational Card */}
