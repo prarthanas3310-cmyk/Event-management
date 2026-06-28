@@ -7,7 +7,7 @@ const Event = require('../models/Event');
 
 const SECRET = process.env.JWT_SECRET || 'your_secret_key_here';
 
-// Middleware to check if user is admin
+// Middleware: admin only
 function adminOnly(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -17,6 +17,20 @@ function adminOnly(req, res, next) {
     if (decoded.role !== 'admin') {
       return res.status(403).json({ error: 'Access denied. Admin only.' });
     }
+    req.user = decoded;
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+// Middleware: any logged-in user
+function loggedIn(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+  try {
+    const decoded = jwt.verify(token, SECRET);
     req.user = decoded;
     next();
   } catch {
@@ -63,8 +77,8 @@ router.get('/events/:id', async (req, res) => {
 
 /* ─── REGISTRATION ROUTES ─── */
 
-// CREATE Registration — admin only
-router.post('/registrations', adminOnly, async (req, res) => {
+// CREATE Registration — any logged-in user
+router.post('/registrations', loggedIn, async (req, res) => {
   try {
     const { eventId, roomNo, ticketCount } = req.body;
 
